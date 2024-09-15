@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HomeApi.Contracts;
+using HomeApi.Contracts.Home;
 using HomeApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
