@@ -1,3 +1,4 @@
+using HomeApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,16 +17,20 @@ namespace HomeApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration
+        { get; } = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Development.json")
+            .AddJsonFile("HomeOptions.json")
+            .Build();
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Добавляем новый сервис
+            services.Configure<HomeOptions>(Configuration);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
