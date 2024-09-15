@@ -39,6 +39,7 @@ namespace HomeApi.Contracts.Devices
         /// Напряжение питания устройства (обязательное поле)
         /// </summary>
         [Required]
+        [Range(120, 220, ErrorMessage = "Поддерживаются устройства с напряжением от {1} до {2} вольт")]
         public int CurrentVolts { get; set; }
 
         /// <summary>
