@@ -14,44 +14,36 @@ namespace HomeApi.Contracts.Models.Devices
         /// <summary>
         /// Название устройства (обязательное поле)
         /// </summary>
-        [Required]
         public string Name { get; set; }
 
         /// <summary>
         /// Производитель устройства (обязательное поле)
         /// </summary>
-        [Required]
         public string Manufacturer { get; set; }
 
         /// <summary>
         /// Модель устройства (обязательное поле)
         /// </summary>
-        [Required]
         public string Model { get; set; }
 
         /// <summary>
         /// Серийный номер устройства (обязательное поле)
         /// </summary>
-        [Required]
         public string SerialNumber { get; set; }
 
         /// <summary>
         /// Напряжение питания устройства (обязательное поле)
         /// </summary>
-        [Required]
-        [Range(120, 220, ErrorMessage = "Поддерживаются устройства с напряжением от {1} до {2} вольт")]
         public int CurrentVolts { get; set; }
 
         /// <summary>
         /// Работает ли на газу (обязательное поле)
         /// </summary>
-        [Required]
         public bool GasUsage { get; set; }
 
         /// <summary>
         /// Расположение устройства (обязательное поле)
         /// </summary>
-        [Required]
         public string Location { get; set; }
     }
 }
