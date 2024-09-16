@@ -1,4 +1,3 @@
-using HomeApi.Contracts.Home;
 using HomeApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

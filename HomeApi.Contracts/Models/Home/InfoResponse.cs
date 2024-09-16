@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeApi.Contracts.Home
+namespace HomeApi.Contracts.Models.Home
 {
     /// <summary>
     /// Информация о вашем доме (модель ответа)

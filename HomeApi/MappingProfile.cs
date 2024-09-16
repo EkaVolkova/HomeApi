@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using HomeApi.Contracts.Models.Home;
 using HomeApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeApi.Contracts.Home
+namespace HomeApi
 {
     /// <summary>
     /// Настройки маппинга всех сущностей приложения

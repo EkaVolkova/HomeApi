@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HomeApi.Contracts.Devices;
+using HomeApi.Contracts.Models.Devices;
 using HomeApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
