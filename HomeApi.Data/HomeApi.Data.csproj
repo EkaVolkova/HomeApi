@@ -17,4 +17,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.17" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HomeApi.Contracts\HomeApi.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>
