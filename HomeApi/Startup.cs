@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
 using HomeApi.Contracts.Validation.Devices;
 using HomeApi.Data.Models;
+using HomeApi.Data.Repos;
 using HomeApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,16 +35,28 @@ namespace HomeApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // регистрация сервиса репозитория для взаимодействия с базой данных
+            services.AddSingleton<IDeviceRepository, DeviceRepository>();
+            services.AddSingleton<IRoomRepository, RoomRepository>();
+
             // Добавляем новый сервис
             services.Configure<HomeOptions>(Configuration);
+
+            //Добавляем подключение к БД
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<HomeApiContext>(options => options.UseSqlServer(connection), ServiceLifetime.Singleton);
+
+            //Добавляем валидацию
             services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddDeviceRequestValidator>());
+
             // Подключаем автомаппинг
             var assembly = Assembly.GetAssembly(typeof(MappingProfile));
             services.AddAutoMapper(assembly);
             
+            //Подключаем конитроллеры
             services.AddControllers();
+
+            //Добавляем Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HomeApi", Version = "v1" });
