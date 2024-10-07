@@ -2,6 +2,7 @@
 using HomeApi.Data.Models;
 using HomeApi.Data.Models.Devices;
 using HomeApi.Data.Models.Home;
+using HomeApi.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,43 @@ namespace HomeApi.Data.Repos
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteDevice(Device device)
+        {
+            // Удаление 
+            _context.Devices.Remove(device);
+
+            // Сохранение изменений
+            await _context.SaveChangesAsync();
+
+        }
+
+        /// <summary>
+        /// Получить список всех устройств в БД
+        /// </summary>
+        /// <returns>Список устройств</returns>
+        public async Task<Device> GetDeviceById(Guid id)
+        {
+            //Получаем устройство вместе с объектом комнаты, в которых они расположены
+            return await _context.Devices
+                .Include(d => d.Room)
+                .Where(d => d.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Получить устройство из БД по ID
+        /// </summary>
+        /// <param name="id">ID устройства</param>
+        /// <returns>устройство</returns>
+        public async Task<Device> GetDeviceByName(string name)
+        {
+            //Получаем устройство вместе с объектом комнаты, в которых они расположены
+            return await _context.Devices
+                .Include(d => d.Room)
+                .Where(d => d.Name == name)
+                .FirstOrDefaultAsync();
+        }
+
         /// <summary>
         /// Получить список всех устройств в БД
         /// </summary>
@@ -48,6 +86,32 @@ namespace HomeApi.Data.Repos
             return await _context.Devices
                 .Include(d => d.Room)
                 .ToListAsync();
+        }
+
+        public async Task UpdateDevice(Device device, Room room, UpdateDeviceQuery updateDevieceQuery)
+        {
+            device.Room = room;
+            device.RoomId = room.Id;
+
+            if (!string.IsNullOrEmpty(updateDevieceQuery.NewName))
+                device.Name = updateDevieceQuery.NewName;
+
+            if (!string.IsNullOrEmpty(updateDevieceQuery.NewModel))
+                device.Model = updateDevieceQuery.NewModel;
+
+            if (!string.IsNullOrEmpty(updateDevieceQuery.NewSerial))
+                device.SerialNumber = updateDevieceQuery.NewSerial;
+
+            if (!string.IsNullOrEmpty(updateDevieceQuery.NewManufacter))
+                device.Manufacturer = updateDevieceQuery.NewManufacter;
+
+            // Обновление 
+            var entry = _context.Entry(device);
+            if (entry.State == EntityState.Detached)
+                _context.Devices.Update(device);
+
+            // Сохранение изменений
+            await _context.SaveChangesAsync();
         }
     }
 }
