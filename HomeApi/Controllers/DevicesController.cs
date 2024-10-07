@@ -119,5 +119,28 @@ namespace HomeApi.Controllers
             return StatusCode(200, $"Устройство c id = {id} изменено!");
 
         }
+        /// <summary>
+        /// Удалить устройство
+        /// </summary>
+        /// <param name="id">Идентификатор устройства</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("Delete{id}")]
+        public async Task<IActionResult> DeleteAsyc(
+            [FromRoute] Guid id
+            )
+        {
+            //Проверяем, есть ли устройство с данным id в БД
+            var device = await _deviceReposirory.GetDeviceById(id);
+            if (device == null)
+                return StatusCode(400, $"Устройство c id = {id} отсутствует!");
+
+            //Удаляем данные из БД
+            await _deviceReposirory.DeleteDevice(device);
+
+            //Возвращаем код успешного завершения операции
+            return StatusCode(200, $"Устройство c id = {id} удалено!");
+
+        }
     }
 }
