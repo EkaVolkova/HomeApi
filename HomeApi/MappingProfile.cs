@@ -32,6 +32,7 @@ namespace HomeApi
             CreateMap<EditDeviceRequest, UpdateDeviceQuery>()
                 .ForMember(m => m.NewSerial,
                     opt => opt.MapFrom(src => src.NewSerialNumber));
+            CreateMap<EditRoomRequest, UpdateRoomQuery>();
             CreateMap<Device, DeviceView>();
 
 
