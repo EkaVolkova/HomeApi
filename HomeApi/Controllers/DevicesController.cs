@@ -7,6 +7,7 @@ using HomeApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HomeApi.Controllers
@@ -36,9 +37,24 @@ namespace HomeApi.Controllers
         /// </summary>
         [HttpGet]
         [Route("")]
-        public IActionResult Get()
+        public async Task<IActionResult> GetAsync()
         {
-            return StatusCode(200, "Устройства отсутствуют");
+            //Получаем список устройств из БД
+            var devises = await _deviceReposirory.GetDevices();
+
+            //Проверяем, есть ли устройства
+            if(devises == null || devises.Count == 0)
+                return StatusCode(200, "Устройства отсутствуют");
+
+            //Преобразуем данные в представление
+            var resp = new GetDevicesResponse
+            {
+                DeviceAmount = devises.Count,
+                Devices = _mapper.Map<List<Device>, List<DeviceView>>(devises)
+            };
+
+            //Возвращаем код успешного завершения и представление
+            return StatusCode(200, resp);
         }
 
         /// <summary>
