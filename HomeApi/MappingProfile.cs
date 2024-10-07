@@ -4,6 +4,7 @@ using HomeApi.Contracts.Models.Home;
 using HomeApi.Contracts.Models.Rooms;
 using HomeApi.Data.Models.Devices;
 using HomeApi.Data.Models.Home;
+using HomeApi.Data.Queries;
 using HomeApi.Models;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,10 @@ namespace HomeApi
                     opt => opt.MapFrom(src => src.Address));
             CreateMap<AddRoomRequest, Room>();
             CreateMap<AddDeviceRequest, Device> ();
+            CreateMap<EditDeviceRequest, UpdateDeviceQuery>()
+                .ForMember(m => m.NewSerial,
+                    opt => opt.MapFrom(src => src.NewSerialNumber));
+
 
         }
     }
