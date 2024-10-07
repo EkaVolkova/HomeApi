@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using HomeApi.Contracts.Models.Devices;
 using HomeApi.Data.Models.Devices;
+using HomeApi.Data.Queries;
 using HomeApi.Data.Repos;
 using HomeApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System;
 using System.Threading.Tasks;
 
 namespace HomeApi.Controllers
@@ -67,5 +69,39 @@ namespace HomeApi.Controllers
             return StatusCode(200, $"Устройство {request.Name} добавлено!");
         }
 
+        /// <summary>
+        /// Обновить устройство
+        /// </summary>
+        /// <param name="id">Идентификатор устройства</param>
+        /// <param name="request">Модель запроса обновления</param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Route("Edit{id}")]
+        public async Task<IActionResult> EditAsyc(
+            [FromRoute] Guid id,
+            [FromBody]
+            EditDeviceRequest request
+            )
+        {
+            //Проверяем, есть ли устройство с данным id в БД
+            var device = await _deviceReposirory.GetDeviceById(id);
+            if (device == null)
+                return StatusCode(400, $"Устройство c id = {id} отсутствует!");
+
+            //Проверяем, есть ли комната с данным названием в БД
+            var room = await _roomReposirory.GetRoomByName(request.NewLocation);
+            if (room == null)
+                return StatusCode(400, $"Комната {request.NewLocation} отсутствует!");
+
+            //Преобразуем EditDeviceRequest в UpdateDeviceQuery при помощи AutoMapper
+            var query = _mapper.Map<EditDeviceRequest, UpdateDeviceQuery>(request);
+
+            //Обновляем данные в БД
+            await _deviceReposirory.UpdateDevice(device, room, query);
+
+            //Возвращаем код успешного завершения операции
+            return StatusCode(200, $"Устройство c id = {id} изменено!");
+
+        }
     }
 }
